@@ -4,21 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
+const mongoose = require('mongoose').default;
 const User = require('./models/user');
 
 
-
-
-
-
-// const sequelize = require('./util/database');
-// const Product = require('./models/product');
-// const User = require('./models/user');
-// const Cart = require('./models/cart');
-// const CartItem = require('./models/cart-item');
-// const Order = require('./models/order');
-// const OrderItem = require('./models/order-item');
 
 const app = express();
 
@@ -33,9 +22,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  User.findById('64c6cdf06c5ef42dce282ef0')
+  User.findById('64d6755a8190e595c17df4af')
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
+      req.user = user;
       next();
     })
     .catch(err => console.log(err));
@@ -47,9 +36,26 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(()=>{
+mongoose.connect('mongodb+srv://mambakla:Geralt_009@cluster0.ofonenl.mongodb.net/').then(
 
-    app.listen(3000)
+    result => {
+        User.findOne().then( user=>{
+            if(!user){
+                const user = new User({
+                    name: 'Vova',
+                    email: 'VovaLox@tut.by',
+                    cart: {
+                        items:[]
+                    },
+                })
+                user.save();
+            }
+        });
+
+        app.listen(3000)
+    })
+    .catch(error=>{
+    console.log(error)
 })
 
 
