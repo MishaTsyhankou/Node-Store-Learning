@@ -28,12 +28,13 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const {add} = require("nodemon/lib/rules");
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  User.findById('64c6cdf06c5ef42dce282ef0')
+  User.findById('64d6755a8190e595c17df4af')
     .then(user => {
       req.user = new User(user.name, user.email, user.cart, user._id);
       next();
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404);
 
