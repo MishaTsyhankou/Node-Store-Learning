@@ -59,18 +59,18 @@ const port = 3000
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: 'Max',
-          email: 'max@test.com',
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
-    });
+    // User.findOne().then(user => {
+    //   if (!user) {
+    //     const user = new User({
+    //       name: 'Max',
+    //       email: 'max@test.com',
+    //       cart: {
+    //         items: []
+    //       }
+    //     });
+    //     user.save();
+    //   }
+    // });
     app.listen(port,  () => {
         console.log(`\x1b[1;34mStart on \u001B[33mhttp://localhost:${port}/\u001B[0m`)
     });
